@@ -1,0 +1,56 @@
+[
+  {
+    "id": "84e96018-4022-434e-80bf-000ce4cd12b8",
+    "title": "The Future of Artificial Intelligence",
+    "channel": "Aiden Thompson",
+    "image": "https://unit-3-project-api-0a5620414506.herokuapp.com/images/image0.jpg"
+  },
+  {
+    "id": "c05b9a93-8682-4ab6-aff2-92ebb4bbfc14",
+    "title": "Exploring Cities of Europe",
+    "channel": "Ryan Hernandez",
+    "image": "https://unit-3-project-api-0a5620414506.herokuapp.com/images/image1.jpg "
+  },
+  {
+    "id": "25ce5d91-a262-4dcf-bb87-42b87546bcfa",
+    "title": "Molecular Gastronomy: Secrets Unveiled",
+    "channel": "Cornelia Currey",
+    "image": "https://unit-3-project-api-0a5620414506.herokuapp.com/images/image2.jpg"
+  },
+  {
+    "id": "b6f35f03-7936-409b-bd2a-446bcc5f30e7",
+    "title": "Embracing Serenity in Everyday Moments",
+    "channel": "Dalia Bennu",
+    "image": "https://unit-3-project-api-0a5620414506.herokuapp.com/images/image3.jpg"
+  },
+  {
+    "id": "1b964601-a6dd-4fcc-b5f3-1000338c9557",
+    "title": "Beyond the Horizon",
+    "channel": "Emmett Wilson",
+    "image": "https://unit-3-project-api-0a5620414506.herokuapp.com/images/image4.jpg"
+  },
+  {
+    "id": "9c268c0a-83dc-4b96-856a-bb5ded2772b1",
+    "title": "Wild Rhythms: Harmony of African Fauna",
+    "channel": "Priscilla Romani",
+    "image": "https://unit-3-project-api-0a5620414506.herokuapp.com/images/image5.jpg"
+  },
+  {
+    "id": "fc5261d1-58a0-47e4-9c19-2b7a1715fa1b",
+    "title": "Discovering the Night Sky",
+    "channel": "Sabine Faucher",
+    "image": "https://unit-3-project-api-0a5620414506.herokuapp.com/images/image6.jpg"
+  },
+  {
+    "id": "99478bed-6428-49ed-8eaa-f245a5414336",
+    "title": "Art Unveiled",
+    "channel": "Theodore Bernard",
+    "image": "https://unit-3-project-api-0a5620414506.herokuapp.com/images/image7.jpg"
+  },
+  {
+    "id": "76ca28c0-7dea-4553-887f-8e5129a80fc3",
+    "title": "A Journey Through Time and Technology",
+    "channel": "Farah Mikhail",
+    "image": "https://unit-3-project-api-0a5620414506.herokuapp.com/images/image8.jpg"
+  }
+]
