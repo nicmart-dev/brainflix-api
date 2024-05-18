@@ -15,10 +15,20 @@ function loadVideoData() {
     }
 }
 
-// get all videos as a single array collection
+// get all videos but only return basic info
 router.get("/", (_req, res) => {
     const videos = loadVideoData();
-    res.json(videos);
+    if (videos) {
+        const videoSnippets = videos.map(video => ({
+            id: video.id,
+            title: video.title,
+            channel: video.channel,
+            image: video.image
+        }));
+        res.json(videoSnippets);
+    } else {
+        res.status(500).json({ error: 'Failed to load video data' });
+    }
 });
 
 
