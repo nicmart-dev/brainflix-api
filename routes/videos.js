@@ -14,7 +14,7 @@ const imageFilePath = `${BACKEND_URL}:${PORT}/images/`;
 
 // middleware to validate API key
 const validateApiKey = (req, res, next) => {
-    const apiKey = req.headers['api-key'];
+    const apiKey = req.query.api_key;
 
     // check if API key is provided
     if (!apiKey) {
