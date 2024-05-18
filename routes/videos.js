@@ -131,5 +131,34 @@ router.post("/:id/comments", (req, res) => {
     }
 });
 
+/* Delete comment */
+router.delete("/:videoId/comments/:id", (req, res) => {
+    try {
+        const videos = loadVideoData(); // read video json file
+
+        // find video with comment to delete
+        const video = videos.find(video => video.id === req.params.videoId);
+
+        // now find comment to delete
+        const commentIdToRemove = req.params.id;
+        const commentToRemove = video.comments.find(comment => comment.id === commentIdToRemove);
+
+        if (commentToRemove) {
+            // Remove comment from the array
+            video.comments = video.comments.filter(comment => comment.id !== commentIdToRemove);
+
+            fs.writeFileSync(videoFilePath, JSON.stringify(videos));
+            res.json({
+                message: "Comment removed successfully",
+                comment: commentToRemove // return deleted comment object 
+            });
+        } else {
+            res.status(404).json({ error: "Comment not found" });
+        }
+    } catch (error) {
+        res.status(500).json({ error: "Internal server error" });
+    }
+});
+
 
 module.exports = router;
