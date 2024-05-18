@@ -12,6 +12,19 @@ require('dotenv').config(); // Ensure environment variables are available
 const { PORT, BACKEND_URL } = process.env; // Destructure BACKEND_URL and PORT from process.env
 const imageFilePath = `${BACKEND_URL}:${PORT}/images/`;
 
+// middleware to validate API key
+const validateApiKey = (req, res, next) => {
+    const apiKey = req.headers['api-key'];
+
+    // check if API key is provided
+    if (!apiKey) {
+        return res.status(401).json({ error: 'API key is missing' });
+    }
+
+    // API key is valid, proceed to the next middleware
+    next();
+};
+
 /* read video file when needed by endpoint */
 function loadVideoData() {
     try {
@@ -21,6 +34,9 @@ function loadVideoData() {
         console.error('Could not load video data:', error.message);
     }
 }
+
+// apply API key validation middleware to all routes
+router.use(validateApiKey);
 
 // get all videos but only return basic info
 router.get("/", (_req, res) => {
