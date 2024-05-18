@@ -53,6 +53,8 @@ router.post("/", (req, res) => {
             description: req.body.description,
             views: 0, // no views as just posted
             likes: 0, // no likes  as just posted
+            duration: "0:20", // placeholder
+            video: "https://unit-3-project-api-0a5620414506.herokuapp.com/stream", // placeholder video stream
             timestamp: Date.now(), // set current time for posted date
             comments: [], // set empty array for comments
         };
