@@ -104,5 +104,32 @@ router.post("/", (req, res) => {
     }
 });
 
+/* Post comment */
+router.post("/:id/comments", (req, res) => {
+    try {
+        const videos = loadVideoData(); // read video json file
+
+        // find video to add comment to
+        const video = videos.find(video => video.id === req.params.id);
+
+        // construct new comment to add
+        const newComment = {
+            id: uuidv4(),
+            name: req.body.name,
+            comment: req.body.comment,
+            likes: 0, // no likes as comment just posted
+            timestamp: Date.now(), // set current time for posted date
+        };
+        video.comments.push(newComment);
+        fs.writeFileSync(videoFilePath, JSON.stringify(videos));
+        res.json({
+            message: "Comment added to video successfully",
+            comment: newComment // return comment object 
+        });
+    } catch (error) {
+        res.status(500).json({ error: "Internal server error" });
+    }
+});
+
 
 module.exports = router;
