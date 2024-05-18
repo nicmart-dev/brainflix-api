@@ -3,13 +3,19 @@ const router = express.Router();
 const fs = require("fs");
 const { v4: uuidv4 } = require("uuid");
 
-// get video file using absolute path with Node path module
+require('dotenv').config(); // Ensure environment variables are available
+const { PORT, BACKEND_URL, NODE_ENV } = process.env; // Destructure process.env
+
+
+/* get video file using absolute path with Node path module. 
+Note: Support videos.dev.json to not commit changes to version control.
+*/
 const path = require('path');
-const videoFilePath = path.resolve(__dirname, '../data/videos.json');
+const videosFileFolder = path.resolve(__dirname, '../data');
+const videosFile = NODE_ENV === 'production' ? 'videos.json' : 'videos.dev.json';
+const videosFilePath = path.join(videosFileFolder, videosFile);
 
 /* resolving local image so we can then serve images like image0.jpg  */
-require('dotenv').config(); // Ensure environment variables are available
-const { PORT, BACKEND_URL } = process.env; // Destructure BACKEND_URL and PORT from process.env
 const imageFilePath = `${BACKEND_URL}:${PORT}/images/`;
 
 // middleware to validate API key
@@ -28,7 +34,7 @@ const validateApiKey = (req, res, next) => {
 /* read video file when needed by endpoint */
 function loadVideoData() {
     try {
-        const videos = JSON.parse(fs.readFileSync(videoFilePath, "utf8"));
+        const videos = JSON.parse(fs.readFileSync(videosFilePath, "utf8"));
         return videos;
     } catch (error) {
         console.error('Could not load video data:', error.message);
@@ -94,7 +100,7 @@ router.post("/", (req, res) => {
             comments: [], // set empty array for comments
         };
         videos.push(newVideo);
-        fs.writeFileSync(videoFilePath, JSON.stringify(videos));
+        fs.writeFileSync(videosFilePath, JSON.stringify(videos));
         res.json({
             message: "Video uploaded successfully",
             video: newVideo // return video object 
@@ -121,7 +127,7 @@ router.post("/:id/comments", (req, res) => {
             timestamp: Date.now(), // set current time for posted date
         };
         video.comments.push(newComment);
-        fs.writeFileSync(videoFilePath, JSON.stringify(videos));
+        fs.writeFileSync(videosFilePath, JSON.stringify(videos));
         res.json({
             message: "Comment added to video successfully",
             comment: newComment // return comment object 
@@ -147,7 +153,7 @@ router.delete("/:videoId/comments/:id", (req, res) => {
             // Remove comment from the array
             video.comments = video.comments.filter(comment => comment.id !== commentIdToRemove);
 
-            fs.writeFileSync(videoFilePath, JSON.stringify(videos));
+            fs.writeFileSync(videosFilePath, JSON.stringify(videos));
             res.json({
                 message: "Comment removed successfully",
                 comment: commentToRemove // return deleted comment object 
