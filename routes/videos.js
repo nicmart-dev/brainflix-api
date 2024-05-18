@@ -7,6 +7,12 @@ const { v4: uuidv4 } = require("uuid");
 const path = require('path');
 const videoFilePath = path.resolve(__dirname, '../data/videos.json');
 
+/* resolving local image so we can then serve images like image0.jpg  */
+require('dotenv').config(); // Ensure environment variables are available
+const { PORT, BACKEND_URL } = process.env; // Destructure BACKEND_URL and PORT from process.env
+const imageFilePath = `${BACKEND_URL}:${PORT}/images/`;
+
+/* read video file when needed by endpoint */
 function loadVideoData() {
     try {
         const videos = JSON.parse(fs.readFileSync(videoFilePath, "utf8"));
@@ -24,7 +30,7 @@ router.get("/", (_req, res) => {
             id: video.id,
             title: video.title,
             channel: video.channel,
-            image: video.image
+            image: `${imageFilePath}${video.image}` // make image accessible on server
         }));
         res.json(videoSnippets);
     } else {
@@ -36,8 +42,21 @@ router.get("/", (_req, res) => {
 // get a single video using an id
 router.get("/:id", (req, res) => {
     const videos = loadVideoData();
-    const foundVideo = videos.find((video) => video.id === req.params.id);
-    res.json(foundVideo);
+    if (videos) {
+        const foundVideo = videos.find(video => video.id === req.params.id);
+        if (foundVideo) {
+            // make image accessible on server
+            const videoWithFullPath = {
+                ...foundVideo,
+                image: `${imageFilePath}${foundVideo.image}`
+            };
+            res.json(videoWithFullPath);
+        } else {
+            res.status(404).json({ error: 'Video not found' });
+        }
+    } else {
+        res.status(500).json({ error: 'Failed to load video data' });
+    }
 });
 
 router.post("/", (req, res) => {
