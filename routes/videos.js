@@ -3,12 +3,13 @@ const router = express.Router();
 const fs = require("fs");
 const { v4: uuidv4 } = require("uuid");
 
+// get video file using absolute path with Node path module
+const path = require('path');
+const videoFilePath = path.resolve(__dirname, '../data/videos.json');
+
 function loadVideoData() {
     try {
-        // get file using absolute path using Node path module
-        const path = require('path');
-        const filePath = path.resolve(__dirname, '../data/videos.json');
-        const videos = JSON.parse(fs.readFileSync(filePath, "utf8"));
+        const videos = JSON.parse(fs.readFileSync(videoFilePath, "utf8"));
         return videos;
     } catch (error) {
         console.error('Could not load video data:', error.message);
@@ -37,6 +38,33 @@ router.get("/:id", (req, res) => {
     const videos = loadVideoData();
     const foundVideo = videos.find((video) => video.id === req.params.id);
     res.json(foundVideo);
+});
+
+router.post("/", (req, res) => {
+    try {
+        const videos = loadVideoData(); // read video json file
+
+        // new video with only title, image, and description set through API
+        const newVideo = {
+            id: uuidv4(),
+            title: req.body.title,
+            channel: "Anonymous visitor", // set placeholder value
+            image: req.body.image,
+            description: req.body.description,
+            views: 0, // no views as just posted
+            likes: 0, // no likes  as just posted
+            timestamp: Date.now(), // set current time for posted date
+            comments: [], // set empty array for comments
+        };
+        videos.push(newVideo);
+        fs.writeFileSync(videoFilePath, JSON.stringify(videos));
+        res.json({
+            message: "Video uploaded successfully",
+            video: newVideo // return video object 
+        });
+    } catch (error) {
+        res.status(500).json({ error: "Internal server error" });
+    }
 });
 
 
