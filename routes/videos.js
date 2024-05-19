@@ -108,7 +108,7 @@ router.post("/image", upload.single("poster"), (req, res) => {
 
     res.status(200).json({
         message: "File uploaded successfully",
-        filePath: `/images/${req.file.filename}`
+        fileName: `${req.file.filename}`
     });
 });
 
