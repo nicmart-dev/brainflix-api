@@ -100,6 +100,39 @@ router.get("/:id", (req, res) => {
     }
 });
 
+// endpoint to like a video
+router.put("/:id/likes", (req, res) => {
+    const videos = loadVideoData();
+    if (videos) {
+        const foundVideo = videos.find(video => video.id === req.params.id);
+
+        if (foundVideo) {
+
+            // Convert the likes property to a number
+            let likes = parseInt(foundVideo.likes.replace(/,/g, ''), 10);
+            likes += 1 // increment like counter
+
+            // Update the likes property (and format it as a string with commas, if needed)
+            foundVideo.likes = likes.toLocaleString();
+
+            // save change back to videos file
+            fs.writeFileSync(videosFilePath, JSON.stringify(videos));
+            res.status(200).json({
+                message: "Like added on this video",
+                video: {
+                    id: foundVideo.id,
+                    title: foundVideo.title,
+                    likes: foundVideo.likes
+                }
+            });
+        } else {
+            res.status(404).json({ error: 'Video not found' });
+        }
+    } else {
+        res.status(500).json({ error: 'Failed to load video data' });
+    }
+});
+
 // Define the route for image upload from field named "poster"
 router.post("/image", upload.single("poster"), (req, res) => {
     if (!req.file) {
