@@ -203,6 +203,40 @@ router.post("/:id/comments", (req, res) => {
     }
 });
 
+/* endpoint to like a video comment, reusing like same functionality as like video and delete comment functionality.  */
+router.put("/:videoId/comments/:id/likes", (req, res) => {
+    const videos = loadVideoData();
+    if (videos) {
+        // find video with comment to like
+        const video = videos.find(video => video.id === req.params.videoId);
+
+        // now find comment to like
+        const foundComment = video.comments.find(comment => comment.id === req.params.id);
+
+        if (foundComment) {
+            foundComment.likes += 1 // increment like number counter
+
+            // save change back to videos file
+            fs.writeFileSync(videosFilePath, JSON.stringify(videos));
+            res.status(200).json({
+                message: "Like added on this comment",
+                video: {
+                    id: video.id,
+                    title: video.title,
+                    comments: {
+                        id: foundComment.id,
+                        likes: foundComment.likes
+                    }
+                }
+            });
+        } else {
+            res.status(404).json({ error: 'Comment not found' });
+        }
+    } else {
+        res.status(500).json({ error: 'Failed to load video comment data' });
+    }
+});
+
 /* Delete comment */
 router.delete("/:videoId/comments/:id", (req, res) => {
     try {
