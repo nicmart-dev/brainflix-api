@@ -3,4 +3,4 @@ node_modules
 videos.dev.json
 
 # Ignoring user uploaded files
-[0-9]*.jpg
+public/images/[0-9]*
