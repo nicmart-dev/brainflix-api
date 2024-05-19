@@ -19,8 +19,6 @@ const videosFilePath = path.join(videosFileFolder, videosFile);
 /* resolving local image so we can then serve images like image0.jpg  */
 const imageFilePath = `${BACKEND_URL}:${PORT}/images/`;
 
-/* resolving local upload so we can then serve user uploaded poster images  */
-const uploadsFilePath = `${BACKEND_URL}:${PORT}/uploads/`;
 
 // middleware to validate API key
 const validateApiKey = (req, res, next) => {
@@ -48,7 +46,7 @@ function loadVideoData() {
 // Configure multer for file storage
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
-        cb(null, path.join(__dirname, "../public/uploads")); // Ensure the 'uploads' directory is inside 'public'
+        cb(null, path.join(__dirname, "../public/images")); // Ensure the 'uploads' directory is inside 'public'
     },
     filename: (req, file, cb) => {
         cb(null, Date.now() + path.extname(file.originalname)); // Use current timestamp as file name
@@ -104,14 +102,13 @@ router.get("/:id", (req, res) => {
 
 // Define the route for image upload from field named "poster"
 router.post("/image", upload.single("poster"), (req, res) => {
-    console.log("api to upload being called")
     if (!req.file) {
         return res.status(400).json({ message: "No file uploaded" });
     }
 
     res.status(200).json({
         message: "File uploaded successfully",
-        filePath: `/uploads/${req.file.filename}`
+        filePath: `/images/${req.file.filename}`
     });
 });
 
