@@ -1,3 +1,4 @@
 {
-  "ignore": ["data/*.json"]
+  "ignore": ["data/*.json"],
+  "ext": "js,json"
 }
