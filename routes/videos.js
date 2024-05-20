@@ -108,8 +108,8 @@ router.put("/:id/likes", (req, res) => {
 
         if (foundVideo) {
 
-            // Convert the likes property to a number
-            let likes = parseInt(foundVideo.likes.replace(/,/g, ''), 10);
+            // Convert the likes property to a number if not already
+            let likes = typeof foundVideo.likes === 'string' ? parseInt(foundVideo.likes.replace(/,/g, ''), 10) : foundVideo.likes;
             likes += 1 // increment like counter
 
             // Update the likes property (and format it as a string with commas, if needed)
