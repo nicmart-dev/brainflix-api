@@ -19,6 +19,9 @@ const videosFilePath = path.join(videosFileFolder, videosFile);
 /* resolving local image so we can then serve images like image0.jpg  */
 const imageFilePath = `${BACKEND_URL}:${PORT}/images/`;
 
+/* resolving local video player folder containing video files  */
+const videoPlayerPath = `${BACKEND_URL}:${PORT}/player/`;
+
 
 // middleware to validate API key
 const validateApiKey = (req, res, next) => {
@@ -90,10 +93,11 @@ router.get("/:id", (req, res) => {
     if (videos) {
         const foundVideo = videos.find(video => video.id === req.params.id);
         if (foundVideo) {
-            // make image accessible on server
+            // make image accessible on server, and use placeholder video
             const videoWithFullPath = {
                 ...foundVideo,
-                image: `${imageFilePath}${foundVideo.image}`
+                image: `${imageFilePath}${foundVideo.image}`,
+                video: `${videoPlayerPath}BrainStation Sample Video.mp4`
             };
             res.json(videoWithFullPath);
         } else {
