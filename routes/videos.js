@@ -36,8 +36,12 @@ const validateApiKey = (req, res, next) => {
 /* read video file when needed by endpoint */
 function loadVideoData() {
     try {
-        const videos = JSON.parse(fs.readFileSync(videosFilePath, "utf8"));
-        return videos;
+        if (NODE_ENV !== 'production' && !fs.existsSync(videosFilePath)) {
+            // If videos.dev.json doesn't exist, create it based on videos.json
+            const defaultVideos = JSON.parse(fs.readFileSync(path.join(__dirname, '../data/videos.json'), 'utf8'));
+            fs.writeFileSync(videosFilePath, JSON.stringify(defaultVideos));
+        }
+        return JSON.parse(fs.readFileSync(videosFilePath, "utf8"));
     } catch (error) {
         console.error('Could not load video data:', error.message);
     }
